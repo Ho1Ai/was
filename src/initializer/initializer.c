@@ -68,7 +68,7 @@ int startWork(int argc, char** argv) {
 
 	int name_position = getNameNumber(argc, argv);
 
-	if (name_position == NAME_POS_UNDEFINED) {
+	if (name_position == NAME_POS_UNDEFINED|| name_position >= argc) {
 		char* new_name = "output.wase\0";
 		work_state->final_name = new_name;
 	} else {
