@@ -20,9 +20,26 @@ typedef enum {
 	TOKEN_EOF,
 	} TokenTypeEnum;
 
+
+
 typedef struct {
 	TokenTypeEnum type;
 	char* lexeme;
 	int line;
 	int column; // for debug
-	} LexerToken
+	} LexerToken;
+
+
+
+/* Execution results (status codes):
+ *  0 - OK
+ * 	1 - Not defined
+ */
+
+int initializeLexer (LexerOutput* output) {
+	int execution_result = 0;
+	
+	
+
+	return execution_result;
+	}

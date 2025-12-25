@@ -28,4 +28,10 @@ typedef struct {
 	int column;
 	} LexerToken;
 
+typedef struct {
+	LexerToken** tokens_list;
+	} LexerOutput;
+
+int initializeLexer(LexerOutput* output);
+
 #endif
