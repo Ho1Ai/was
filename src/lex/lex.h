@@ -32,6 +32,6 @@ typedef struct {
 	LexerToken** tokens_list;
 	} LexerOutput;
 
-int initializeLexer(LexerOutput* output);
+int startLexer(LexerOutput* output, WorkState* work_state);
 
 #endif

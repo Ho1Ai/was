@@ -4,6 +4,7 @@
 
 #include "../globalStructures/full_public.h"
 #include "../reader/reader.h"
+#include "../lex/lex.h"
 
 #define STRING_COMPARISON_TRUE 0
 #define NAME_POS_UNDEFINED -1
@@ -19,6 +20,16 @@ int initializeReader(WorkState* work_state, char* args) {
 	}
 
 
+
+int initializeLex(WorkState* work_state) { // Lex - Lexer. Don't know why, but somewhere there is another initializeLexer function. Strange, lol
+	int status_code = 0;
+
+	LexerOutput* lexeme_list = (LexerOutput*) malloc(sizeof(LexerOutput));
+
+	startLexer(lexeme_list, work_state);
+
+	return status_code;
+	}
 
 
 
@@ -76,6 +87,8 @@ int startWork(int argc, char** argv) {
 		}
 
 	initializeReader(work_state, argv[1]);
+
+	initializeLex(work_state);
 
 	//dropContent(work_state); // debug function for file reader
 
