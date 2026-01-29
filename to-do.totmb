@@ -1,0 +1,9 @@
+Lexer is not ready.
+How to understand lexeme type if there is something same in the begining?
+Ideas:
+	- make substrings from main string
+		* But how to undestand what the separator is?
+		| Maybe just add supported letters?
+		|	-> Nope, it is really heavy...
+		| Make supported separators? I mean supported ends of lexeme: whitespace, semicolon, parantheses, comas, etc.
+		| 	-> but is it that type exactly? just make tests and maybe rewrite some stuff

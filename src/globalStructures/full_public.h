@@ -1,3 +1,5 @@
+#include "../lex/lex_out.h"
+
 #ifndef PUBLIC_STRUCTS
 #define PUBLIC_STRUCTS
 
@@ -12,8 +14,9 @@ typedef struct {
 
 typedef struct {
 	WorkingInstance instances;
-	ConfigState config_state;
 	char* final_name;
+	LexerOutput* lexer_state;
+	ConfigState config_state;
 	} WorkState;
 
 #endif

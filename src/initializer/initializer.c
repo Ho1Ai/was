@@ -5,6 +5,7 @@
 #include "../globalStructures/full_public.h"
 #include "../reader/reader.h"
 #include "../lex/lex.h"
+#include "../lex/lex_out.h"
 
 #define STRING_COMPARISON_TRUE 0
 #define NAME_POS_UNDEFINED -1
@@ -25,8 +26,13 @@ int initializeLex(WorkState* work_state) { // Lex - Lexer. Don't know why, but s
 	int status_code = 0;
 
 	LexerOutput* lexeme_list = (LexerOutput*) malloc(sizeof(LexerOutput));
+	lexeme_list->tok_amount = 0;
+
+	printf("starting lexer\n");
 
 	startLexer(lexeme_list, work_state);
+
+	work_state->lexer_state = lexeme_list;
 
 	return status_code;
 	}
@@ -38,7 +44,15 @@ int freeEverything(WorkState* work_state) {
 	for (int i = 0 ; i < work_state->instances.len; ++i) {
 		free(work_state->instances.content[i]);
 		}
-	
+
+	for (int i = 0 ; i < work_state->lexer_state->tok_amount; ++i) {
+		free(work_state->lexer_state->tokens_list[i].lexeme);
+		printf("Dobby is free! :,)\n");
+	}
+
+	free(work_state->lexer_state->tokens_list);
+
+
 	free(work_state);
 	return 0;
 	}
