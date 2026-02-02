@@ -28,6 +28,29 @@ typedef struct {
 
 
 
+int getDefaultTypeLength (WorkState* work_state, size_t i, size_t j) {
+	int length = 0;
+
+	int possible_to_proceed = 1;
+
+	while (possible_to_proceed) {
+		char curr = work_state->instances.content[i][j+length];
+		if (isDecValue(curr) || isTextChar(curr) || curr == '_' || curr == ':') {
+			length++;
+			} else {
+				possible_to_proceed = 0;
+				}
+		}
+
+	return length;
+	}
+
+
+
+
+
+
+
 
 
 DefinersResponseStructure defineDollarTokenType(WorkState* work_state, size_t i, size_t j) { // i and j are positions
@@ -199,6 +222,8 @@ int startLexer (LexerOutput* output, WorkState* work_state) {
 					output->tok_amount++;
 					printf("coma on: %d - %d\n", i, j);
 					break;
+				case '"':
+					break;
 				case ';':
 					// not a token type, just a way to skip the line
 					printf("comment on: %d - %d\n", i, j);
@@ -225,9 +250,28 @@ int startLexer (LexerOutput* output, WorkState* work_state) {
 						printf("identifier on %d - %d\n", i, j);
 						ttype = TOKEN_IDENTIFIER;
 						}
+					
+					if(ttype != TOKEN_UNRECOGNIZED){
+						int allocation_length = getDefaultTypeLength(work_state, i, j);
+					
+						//printf("%d\n", allocation_length);
+						if(output->tok_amount+1>reallocation_size) {
+							reallocation_size+=100;
+							output->tokens_list = realloc(output->tokens_list, sizeof(LexerToken) * reallocation_size);
+						}
+						output->tokens_list[output->tok_amount].lexeme = malloc((allocation_length + 1) * sizeof(char));
+						for (int k = 0; k < allocation_length; k++) {
+							output->tokens_list[output->tok_amount].lexeme[k] = work_state->instances.content[i][j+k];
+						}
+						output->tokens_list[output->tok_amount].lexeme[allocation_length] = '\0';
+						output->tokens_list[output->tok_amount].type = token_type_check_dot.ttype;
+						output->tokens_list[output->tok_amount].line = i;
+						output->tokens_list[output->tok_amount].column = j;
+						output->tok_amount++;
+					}
 					break;
 				}
-				// create tokens here
+				// create tokens here // or no?
 				j++;
 			}
 			leave_inner_loop:
