@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../globalStructures/full_public.h"
 #include "../supports/supports.h"
 #include "./lex_out.h"
@@ -136,7 +137,11 @@ int startLexer (LexerOutput* output, WorkState* work_state) {
 						output->tokens_list = realloc(output->tokens_list, sizeof(LexerToken) * reallocation_size);
 						}
 					
-					output->tokens_list[output->tok_amount].lexeme = malloc(sizeof(LexerToken) * test_len);
+					output->tokens_list[output->tok_amount].lexeme = malloc(sizeof(char) * (test_len+1));
+					for (int k = 0; k < test_len; k++) {
+						output->tokens_list[output->tok_amount].lexeme[k] = work_state->instances.content[i][j+k];
+						}
+					output->tokens_list[output->tok_amount].lexeme[test_len] = '\0';
 					output->tokens_list[output->tok_amount].type = TOKEN_REGISTER;
 					output->tokens_list[output->tok_amount].line = i;
 					output->tokens_list[output->tok_amount].column = j;
@@ -147,34 +152,78 @@ int startLexer (LexerOutput* output, WorkState* work_state) {
 					break;
 				case '$':
 					DefinersResponseStructure token_type_check_dlr = defineDollarTokenType(work_state, i, j);
+					if(output->tok_amount+1>reallocation_size) {
+						reallocation_size+=100;
+						output->tokens_list = realloc(output->tokens_list, sizeof(LexerToken) * reallocation_size);
+						}
+					//printf("%d\n", token_type_check_dlr.vector);
+					output->tokens_list[output->tok_amount].lexeme = malloc((token_type_check_dlr.vector + 1) * sizeof(char));
+					for (int k = 0; k < token_type_check_dlr.vector; k++) {
+						output->tokens_list[output->tok_amount].lexeme[k] = work_state->instances.content[i][j+k];
+						}
+					output->tokens_list[output->tok_amount].lexeme[token_type_check_dlr.vector] = '\0';
+					output->tokens_list[output->tok_amount].type = token_type_check_dlr.ttype;
+					output->tokens_list[output->tok_amount].line = i;
+					output->tokens_list[output->tok_amount].column = j;
+					output->tok_amount++;
 					break;
 				case '.':
 					// let's just call it identifier... Gonna recognize everything in parser, cuz by that time I'll have already had tokens and content, so it would be easier to work.
 					DefinersResponseStructure token_type_check_dot = defineDotTokenType(work_state, i, j);
-
+					if(output->tok_amount+1>reallocation_size) {
+						reallocation_size+=100;
+						output->tokens_list = realloc(output->tokens_list, sizeof(LexerToken) * reallocation_size);
+						}
+					output->tokens_list[output->tok_amount].lexeme = malloc((token_type_check_dot.vector + 1) * sizeof(char));
+					for (int k = 0; k < token_type_check_dot.vector; k++) {
+						output->tokens_list[output->tok_amount].lexeme[k] = work_state->instances.content[i][j+k];
+						}
+					output->tokens_list[output->tok_amount].lexeme[token_type_check_dot.vector] = '\0';
+					output->tokens_list[output->tok_amount].type = token_type_check_dot.ttype;
+					output->tokens_list[output->tok_amount].line = i;
+					output->tokens_list[output->tok_amount].column = j;
+					output->tok_amount++;
 					break;
 				case ',':
+					if(output->tok_amount+1>reallocation_size) {
+						reallocation_size+=100;
+						output->tokens_list = realloc(output->tokens_list, sizeof(LexerToken) * reallocation_size);
+						}
+					output->tokens_list[output->tok_amount].lexeme = malloc((2) * sizeof(char)); // 2 = 1 (',') + 1 ('\0')
+					
+					output->tokens_list[output->tok_amount].lexeme[0] = ',';
+					output->tokens_list[output->tok_amount].lexeme[1] = '\0';
+					output->tokens_list[output->tok_amount].type = TOKEN_COMMA;
+					output->tokens_list[output->tok_amount].line = i;
+					output->tokens_list[output->tok_amount].column = j;
+					output->tok_amount++;
 					printf("coma on: %d - %d\n", i, j);
 					break;
 				case ';':
+					// not a token type, just a way to skip the line
 					printf("comment on: %d - %d\n", i, j);
 					goto leave_inner_loop;
 					break;
 				case '#':
+					// also not a token type, but just a way to skip the line
 					printf("comment on: %d - %d\n", i, j);
 					goto leave_inner_loop;
 					break;
 				default:
+					TokenTypeEnum ttype = TOKEN_UNRECOGNIZED;
 					if(curr_char == ' ' || curr_char == '\t' || curr_char == '\n') break;
 					if(j>0){
 						char test_char = work_state->instances.content[i][j-1];
 						if ((test_char == ' ' || test_char == '\t') && (test_char != '.') && (isDecValue(curr_char) == 0)) {
 							printf("identifier on: %d - %d\n", i, j);
+							ttype = TOKEN_IDENTIFIER;
 							} else if(isDecValue(curr_char) && (test_char == ' ' || test_char == '\t' || test_char == ',')) {
 							printf("number on: %d - %d\n", i, j);
+							ttype = TOKEN_NUMBER;
 							}
 					} else {
 						printf("identifier on %d - %d\n", i, j);
+						ttype = TOKEN_IDENTIFIER;
 						}
 					break;
 				}

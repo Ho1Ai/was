@@ -46,6 +46,7 @@ int freeEverything(WorkState* work_state) {
 		}
 
 	for (int i = 0 ; i < work_state->lexer_state->tok_amount; ++i) {
+		printf("%d - %d - %s\n", work_state->lexer_state->tokens_list[i].line, work_state->lexer_state->tokens_list[i].column, work_state->lexer_state->tokens_list[i].lexeme);
 		free(work_state->lexer_state->tokens_list[i].lexeme);
 		printf("Dobby is free! :,)\n");
 	}

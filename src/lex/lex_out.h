@@ -12,6 +12,7 @@ typedef enum {
 	TOKEN_OPPLUS,
 	TOKEN_OPMINUS,
 	TOKEN_OPASTERISK,
+	TOKEN_COMMA,
 
 	TOKEN_DIRECTIVE, // for future development. Now WAS doesn't have any directives except .byte, .word, .long, etc.
 	
