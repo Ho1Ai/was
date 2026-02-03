@@ -1,6 +1,8 @@
 .section .data
 byteval .byte 0
 
+test .asciz "none", 0
+
 .section .text
 test_mark:
 	movl $0, %eax # asdf
