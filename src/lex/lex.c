@@ -264,12 +264,12 @@ int startLexer (LexerOutput* output, WorkState* work_state) {
 					break;
 				case ';':
 					// not a token type, just a way to skip the line
-					printf("comment on: %d - %d\n", i, j);
+					//printf("comment on: %d - %d\n", i, j);
 					goto leave_inner_loop;
 					break;
 				case '#':
 					// also not a token type, but just a way to skip the line
-					printf("comment on: %d - %d\n", i, j);
+					//printf("comment on: %d - %d\n", i, j);
 					goto leave_inner_loop;
 					break;
 				default:
