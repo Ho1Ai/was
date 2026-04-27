@@ -1,5 +1,5 @@
 CC = gcc
-SOURCE = src/main.c src/reader/reader.c src/reader/lines_counter.c src/initializer/initializer.c src/lex/lex.c src/com_parser/parser.c src/supports/supports.c
+SOURCE = src/main.c src/reader/reader.c src/reader/lines_counter.c src/initializer/initializer.c src/lex/lex.c src/com_parser/parser.c src/supports/supports.c src/com_parser/parser_code.c
 
 FINAL = build/was
 

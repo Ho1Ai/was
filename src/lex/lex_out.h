@@ -31,7 +31,7 @@ typedef struct {
 
 typedef struct {
 	LexerToken* tokens_list;
-	int tok_amount;
+	int tok_amount; // oh, it will keep max = 2147483647 tokens... At least it is will maximum read 268435455 lines. (line type: "label: mn op1, op2, op3"). Well, gonna replace int with size_t in the nearest future
 	} LexerOutput;
 
 #endif

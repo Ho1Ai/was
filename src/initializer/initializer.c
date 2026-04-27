@@ -6,6 +6,7 @@
 #include "../reader/reader.h"
 #include "../lex/lex.h"
 #include "../lex/lex_out.h"
+#include "../com_parser/parser_code.h"
 
 #define STRING_COMPARISON_TRUE 0
 #define NAME_POS_UNDEFINED -1
@@ -38,6 +39,10 @@ int initializeLex(WorkState* work_state) { // Lex - Lexer. Don't know why, but s
 	}
 
 
+int initializeParser(WorkState* work_state) {
+	printf("Initializing parser\n");
+	int parser_status_code = startParser(work_state);
+	}
 
 
 int freeEverything(WorkState* work_state) {
@@ -104,6 +109,8 @@ int startWork(int argc, char** argv) {
 	initializeReader(work_state, argv[1]);
 
 	initializeLex(work_state);
+
+	initializeParser(work_state);
 
 	//dropContent(work_state); // debug function for file reader
 
